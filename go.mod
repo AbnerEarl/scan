@@ -1,4 +1,4 @@
-module scan
+module github.com/AbnerEarl/scan
 
 go 1.24.0
 

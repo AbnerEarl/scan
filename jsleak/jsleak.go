@@ -132,7 +132,7 @@ func linkFinder(content, baseURL string, completeURL, checkStatus bool) ([]strin
 }
 
 func ScanUrl(url string, depth int) ([]SensitiveResult, error) {
-	return ScanUrlList([]string{url}, depth, "", true, true, true, false)
+	return ScanUrlList([]string{url}, depth, "", true, true, false, false)
 }
 
 func ScanUrlList(urlList []string, depth int, yamlFilePath string, enableSecretFinder, enableLinkFinder, checkStatus, completeURL bool) ([]SensitiveResult, error) {
@@ -149,7 +149,6 @@ func ScanUrlList(urlList []string, depth int, yamlFilePath string, enableSecretF
 		os.WriteFile(fmt.Sprintf("%s/trufflehog.yaml", dir), content, os.ModePerm)
 		yamlFilePath = dir + "/trufflehog.yaml"
 	}
-	fmt.Println("yamlFilePath: ", yamlFilePath)
 	if yamlFilePath != "" {
 		loadedPatterns, err := loadPatternsFromYAML(yamlFilePath)
 		if err != nil {
