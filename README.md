@@ -1,6 +1,88 @@
 # scan
 Scan for sensitive information and vulnerabilities, targeting files, directories, Web, URL, S3, GitHub, GCS, Docker image, CI, Postman, Jenkins, Elasticsearch, Hugging Face Model, Dataset, Space, etc.
 
+## Prepare Environment
+
+Take ubuntu for example:
+```shell
+sudo apt update
+sudo snap refresh
+sudo apt install zip curl wget git
+sudo snap install golang --classic
+wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+sudo apt update 
+sudo apt install google-chrome-stable
+```
+
+## How to use?
+
+
+```go
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/AbnerEarl/scan/ffuf"
+	"github.com/AbnerEarl/scan/jsleak"
+	"github.com/AbnerEarl/scan/katana"
+	"github.com/AbnerEarl/scan/rad"
+)
+
+func testJsleak() {
+	result, err := jsleak.ScanUrl("https://zhidao.baidu.com", 0)
+	bys, _ := json.Marshal(result)
+	fmt.Println(string(bys))
+	fmt.Println(err)
+}
+
+func testKatana() {
+	filePath, err := katana.ScanUrl("https://zhidao.baidu.com")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	//filePath := "/Users/frank/test/katana/result.json"
+	result, err := katana.ScanSensitive(filePath, "")
+	fmt.Println(err)
+	bys, _ := json.Marshal(result)
+	fmt.Println(string(bys))
+}
+
+func testRad() {
+	filePath, err := rad.ScanUrl("https://zhidao.baidu.com", "", 1)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	result, err := rad.ReadContent(filePath)
+	fmt.Println(err)
+	bys, _ := json.Marshal(result)
+	fmt.Println(string(bys))
+}
+
+func testFfuf() {
+	filePath, err := ffuf.ScanUrl("https://zhidao.baidu.com")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	result, err := ffuf.ReadContent(filePath)
+	fmt.Println(err)
+	bys, _ := json.Marshal(result)
+	fmt.Println(string(bys))
+}
+
+func main() {
+	testRad()
+	testFfuf()
+	testJsleak()
+	testKatana()
+}
+
+```
+
 
 ## Simple Test Result
 
@@ -278,7 +360,161 @@ ________________________________________________
 
 ## 3. Scan for sensitive information
 
+```shell
+[{
+	"name": "Mapbox - 1",
+	"value": "replace",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "http",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "https",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "item",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "attr",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "href",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "link",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "2000",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "document",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "createElement",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "type",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "text",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "javascript",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "https",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "baidu",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "from",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "zhidao",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "document",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "body",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "appendChild",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "async",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "https",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "dlswbr",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "baidu",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "heicha",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "abclite-2016-s",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "script",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}, {
+	"name": "Mapbox - 1",
+	"value": "html",
+	"url": "https://zhidao.baidu.com/new?targetEncodeUid=907e4069236f25705e79c12e\u0026id=2491"
+}]
+```
+
+
 ## 4.Result Analysis
+
+|Tool| Speed | Time | Result | Analysis|
+|---|---|---|---|---|
+|ffuf|100000|100000|100000|100000|
+|katana|100000|100000|100000|100000|
+|jsleak|100000|100000|100000|100000|
+|rad|100000|100000|100000|100000|
+
+
 
 ## 5.Relate to other tools
 

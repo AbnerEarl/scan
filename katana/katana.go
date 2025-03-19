@@ -126,12 +126,6 @@ func ScanSensitive(filePath string, yamlFilePath string) ([]SensitiveResult, err
 	// 创建 JSON 解码器
 	decoder := json.NewDecoder(file)
 
-	// 读取 JSON 数组的开始字符 '['
-	//_, err = decoder.Token()
-	//if err != nil {
-	//	return nil, err
-	//}
-
 	var result []SensitiveResult
 	// 循环读取每个 JSON 对象
 	for {
@@ -148,12 +142,6 @@ func ScanSensitive(filePath string, yamlFilePath string) ([]SensitiveResult, err
 		// 处理每个解码的数据
 		result = append(result, regexGrep(rd.Response.Body, rd.Request.Endpoint, patterns)...)
 	}
-
-	// 读取 JSON 数组的结束字符 ']'
-	//_, err = decoder.Token()
-	//if err != nil {
-	//	return nil, err
-	//}
 
 	return result, nil
 }
