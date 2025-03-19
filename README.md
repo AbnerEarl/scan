@@ -38,12 +38,16 @@ func testJsleak() {
 }
 
 func testKatana() {
-	filePath, err := katana.ScanUrl("https://zhidao.baidu.com")
+	//filePath, err := katana.ScanUrl("https://zhidao.baidu.com")
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	filePath, err := katana.ScanUrls([]string{"https://zhidao.baidu.com"}, 3, true, []string{"js", "jsp", "php", "html", "htm", "asp", "aspx", "jspx", "json", "xml", "txt"})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
-	//filePath := "/Users/frank/test/katana/result.json"
 	result, err := katana.ScanSensitive(filePath, "")
 	fmt.Println(err)
 	bys, _ := json.Marshal(result)

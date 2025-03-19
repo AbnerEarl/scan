@@ -56,10 +56,10 @@ type yamlPatterns struct {
 }
 
 func ScanUrl(url string) (string, error) {
-	return ScanUrls([]string{url}, 3, true)
+	return ScanUrls([]string{url}, 3, true, nil)
 }
 
-func ScanUrls(urlList []string, maxDepth int, healthCheck bool) (string, error) {
+func ScanUrls(urlList []string, maxDepth int, healthCheck bool, extensionMatch []string) (string, error) {
 
 	uid, _ := uuid.NewV1Str()
 	dir := fmt.Sprintf("/tmp/%s", uid)
@@ -85,8 +85,12 @@ func ScanUrls(urlList []string, maxDepth int, healthCheck bool) (string, error) 
 			return "", err
 		}
 	}
+	em := ""
+	if len(extensionMatch) > 0 {
+		em = fmt.Sprintf("-em %s", strings.Join(extensionMatch, ","))
+	}
 	fileName := fmt.Sprintf("%s/%s.json", dir, uid)
-	cmd := fmt.Sprintf("cd %s && ./katana -u %s -sf key,fqdn,qurl  -silent -jsonl -o %s -c 10 -d %d", dir, strings.Join(urlList, ","), fileName, maxDepth)
+	cmd := fmt.Sprintf("cd %s && ./katana -u %s -sf key,fqdn,qurl  -silent %s -jsonl -o %s -c 10 -d %d", dir, strings.Join(urlList, ","), em, fileName, maxDepth)
 	err = cmdc.Shell(cmd)
 
 	return fileName, err
